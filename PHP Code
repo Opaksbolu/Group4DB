@@ -1,0 +1,26 @@
+<?php
+// Database connection
+$conn = new mysqli("localhost", "root", "", "task_management");
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Retrieve form data
+$username = $_POST['username'];
+$email = $_POST['email'];
+$password = $_POST['password'];
+$profile_picture_url = $_POST['profile_picture_url'];
+
+// Insert data into Users table
+$sql = "INSERT INTO Users (username, email, password, profile_picture_url) VALUES ('$username', '$email', '$password', '$profile_picture_url')";
+
+if ($conn->query($sql) === TRUE) {
+    echo "User registered successfully!";
+} else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+}
+
+$conn->close();
+?>
