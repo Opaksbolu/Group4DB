@@ -1,0 +1,101 @@
+CREATE TABLE Users (
+    user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    profile_picture_url VARCHAR(255) DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_login TIMESTAMP DEFAULT NULL
+);
+
+CREATE TABLE Tasks (
+    task_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    title VARCHAR(100) NOT NULL,
+    description TEXT DEFAULT NULL,
+    due_date DATE DEFAULT NULL,
+    priority TEXT CHECK(priority IN ('low', 'medium', 'high')) NOT NULL,
+    status TEXT CHECK(status IN ('pending', 'in progress', 'completed')) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE Categories (
+    category_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    name VARCHAR(50) NOT NULL,
+    description TEXT DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE Settings (
+    setting_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    notification_preferences TEXT CHECK(notification_preferences IN ('email', 'SMS', 'push')) NOT NULL,
+    theme_preferences TEXT CHECK(theme_preferences IN ('light', 'dark')) NOT NULL,
+    language VARCHAR(20) NOT NULL,
+    timezone VARCHAR(40) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE Reminders (
+    reminder_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    task_id INTEGER,
+    reminder_time TIMESTAMP NOT NULL,
+    reminder_type TEXT CHECK(reminder_type IN ('one-time', 'recurring')) NOT NULL,
+    status TEXT CHECK(status IN ('active', 'dismissed')) NOT NULL,
+    FOREIGN KEY (task_id) REFERENCES Tasks(task_id) ON DELETE CASCADE
+);
+
+CREATE TABLE Analytics (
+    analytics_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    date DATE NOT NULL,
+    tasks_completed INT DEFAULT 0,
+    average_completion_time INT DEFAULT 0,
+    daily_focus_time INT DEFAULT 0,
+    goals_met INT DEFAULT 0,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE Collaborations (
+    collaboration_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    task_id INTEGER,
+    user_id INTEGER,
+    role TEXT CHECK(role IN ('creator', 'contributor')) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (task_id) REFERENCES Tasks(task_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE Habits (
+    habit_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    habit_name VARCHAR(50) NOT NULL,
+    frequency TEXT CHECK(frequency IN ('daily', 'weekly')) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE DEFAULT NULL,
+    current_streak INT DEFAULT 0,
+    best_streak INT DEFAULT 0,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE Notifications (
+    notification_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    type TEXT CHECK(type IN ('task reminder', 'achievement')) NOT NULL,
+    message TEXT NOT NULL,
+    sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    read_status TEXT CHECK(read_status IN ('read', 'unread')) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE Achievements (
+    achievement_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    name VARCHAR(100) NOT NULL,
+    description TEXT DEFAULT NULL,
+    date_earned DATE NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
+);
