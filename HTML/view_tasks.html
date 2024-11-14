@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Tasks</title>
+</head>
+<body>
+    <!-- Navigation Menu -->
+    <nav>
+        <a href="../HTML/create_task.html">Create Task</a> |
+        <a href="../PHP/view_tasks.php">View Tasks</a> |
+        <a href="../HTML/settings.html">Settings</a> |
+        <a href="../PHP/logout.php">Logout</a>
+    </nav>
+
+    <h2>Your Tasks</h2>
+
+    <!-- Task Table (Static Sample Data) -->
+    <table border="1" cellpadding="10">
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Due Date</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Created At</th>
+        </tr>
+        <tr>
+            <td>Sample Task 1</td>
+            <td>Sample description for Task 1</td>
+            <td>2024-12-01</td>
+            <td>High</td>
+            <td>Pending</td>
+            <td>2024-11-01</td>
+        </tr>
+        <tr>
+            <td>Sample Task 2</td>
+            <td>Sample description for Task 2</td>
+            <td>2024-12-15</td>
+            <td>Medium</td>
+            <td>In Progress</td>
+            <td>2024-11-02</td>
+        </tr>
+    </table>
+
+    <!-- Message if no tasks found -->
+    <p>No tasks found. <a href="../HTML/create_task.html">Create a new task</a>.</p>
+</body>
+</html>

@@ -1,0 +1,30 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    text-align: center;
+}
+h2 {
+    color: #333;
+}
+form {
+    display: inline-block;
+    max-width: 400px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+input, button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+}
+button {
+    background: #5cb85c;
+    color: #fff;
+    border: none;
+}
+a {
+    color: #333;
+    text-decoration: none;
+}
