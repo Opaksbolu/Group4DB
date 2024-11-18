@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Tasks</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-10">
+    <div class="max-w-4xl mx-auto bg-white p-8 rounded shadow">
+        <h2 class="text-2xl font-bold mb-5">Your Tasks</h2>
+
+        <!-- Search and Filter Form -->
+        <form method="GET" action="../PHP/view_tasks.php" class="mb-5">
+            <input type="text" name="search" placeholder="Search tasks" class="p-2 border rounded mb-3 w-full" />
+            <select name="filter_priority" class="p-2 border rounded mb-3 w-full">
+                <option value="">All Priorities</option>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+            </select>
+            <select name="filter_status" class="p-2 border rounded mb-3 w-full">
+                <option value="">All Statuses</option>
+                <option value="Pending">Pending</option>
+                <option value="Completed">Completed</option>
+            </select>
+            <select name="sort_by" class="p-2 border rounded mb-3 w-full">
+                <option value="due_date">Sort by Due Date</option>
+                <option value="priority">Sort by Priority</option>
+                <option value="title">Sort by Title</option>
+            </select>
+            <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Apply</button>
+        </form>
+
+        <!-- Pagination Links -->
+        <div class="pagination flex justify-between mt-4">
+            <a href="../PHP/view_tasks.php?page=prev" class="text-blue-500 hover:underline">Previous</a>
+            <a href="../PHP/view_tasks.php?page=next" class="text-blue-500 hover:underline">Next</a>
+        </div>
+
+        <?php include '../PHP/view_tasks.php'; ?>
+    </div>
+</body>
+</html>

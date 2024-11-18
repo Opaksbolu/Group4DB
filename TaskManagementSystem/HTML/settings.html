@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Settings</title>
+    <style>
+        body {
+            transition: background-color 0.3s ease;
+            color: black;
+        }
+
+        .dark-theme {
+            background-color: black;
+            color: white;
+        }
+    </style>
+    <script>
+        const translations = {
+            English: {
+                userSettings: "User Settings",
+                themePreference: "Theme Preference:",
+                language: "Language:",
+                savePreferences: "Save Preferences",
+                changePassword: "Change Password",
+                currentPassword: "Current Password:",
+                newPassword: "New Password:",
+                updatePassword: "Update Password"
+            },
+            Spanish: {
+                userSettings: "Configuración de Usuario",
+                themePreference: "Preferencia de Tema:",
+                language: "Idioma:",
+                savePreferences: "Guardar Preferencias",
+                changePassword: "Cambiar Contraseña",
+                currentPassword: "Contraseña Actual:",
+                newPassword: "Nueva Contraseña:",
+                updatePassword: "Actualizar Contraseña"
+            },
+            French: {
+                userSettings: "Paramètres de l'utilisateur",
+                themePreference: "Préférence de Thème:",
+                language: "Langue:",
+                savePreferences: "Enregistrer les Préférences",
+                changePassword: "Changer le Mot de Passe",
+                currentPassword: "Mot de Passe Actuel:",
+                newPassword: "Nouveau Mot de Passe:",
+                updatePassword: "Mettre à Jour le Mot de Passe"
+            }
+        };
+
+        function updateTheme() {
+            const themeSelect = document.getElementById('theme');
+            const body = document.body;
+
+            if (themeSelect.value === 'Dark') {
+                body.classList.add('dark-theme');
+            } else {
+                body.classList.remove('dark-theme');
+            }
+        }
+
+        function updateLanguage() {
+            const languageSelect = document.getElementById('language');
+            const selectedLanguage = languageSelect.value;
+            const texts = translations[selectedLanguage];
+
+            if (texts) {  // Ensure that the selected language exists in translations
+                document.getElementById('userSettings').textContent = texts.userSettings;
+                document.getElementById('themePreference').textContent = texts.themePreference;
+                document.getElementById('languageLabel').textContent = texts.language;
+                document.getElementById('savePreferences').value = texts.savePreferences;
+                document.getElementById('changePassword').textContent = texts.changePassword;
+                document.getElementById('currentPasswordLabel').textContent = texts.currentPassword;
+                document.getElementById('newPasswordLabel').textContent = texts.newPassword;
+                document.getElementById('updatePassword').value = texts.updatePassword;
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const themeSelect = document.getElementById('theme');
+            themeSelect.addEventListener('change', updateTheme);
+
+            const languageSelect = document.getElementById('language');
+            languageSelect.addEventListener('change', updateLanguage);
+        });
+    </script>
+</head>
+<body>
+    <!-- Navigation Menu -->
+    <nav>
+        <a href="../HTML/create_task.html">Create Task</a> |
+        <a href="../HTML/view_tasks.html">View Tasks</a> |
+        <a href="../HTML/settings.html">Settings</a> |
+        <a href="../PHP/logout.php">Logout</a>
+    </nav>
+
+    <h2 id="userSettings">User Settings</h2>
+    <form action="update_settings.php" method="post">
+        <!-- Theme Preference -->
+        <label id="themePreference" for="theme">Theme Preference:</label>
+        <select id="theme" name="theme">
+            <option value="Light">Light</option>
+            <option value="Dark">Dark</option>
+        </select>
+        <br><br>
+        
+        <!-- Language Preference -->
+        <label id="languageLabel" for="language">Language:</label>
+        <select id="language" name="language">
+            <option value="English">English</option>
+            <option value="Spanish">Spanish</option>
+            <option value="French">French</option>
+        </select>
+        <br><br>
+
+        <input type="submit" id="savePreferences" value="Save Preferences">
+    </form>
+
+    <h2 id="changePassword">Change Password</h2>
+    <form action="update_password.php" method="post">
+        <label id="currentPasswordLabel" for="current_password">Current Password:</label>
+        <input type="password" id="current_password" name="current_password" required>
+        <br><br>
+
+        <label id="newPasswordLabel" for="new_password">New Password:</label>
+        <input type="password" id="new_password" name="new_password" required>
+        <br><br>
+
+        <input type="submit" id="updatePassword" value="Update Password">
+    </form>
+</body>
+</html>
