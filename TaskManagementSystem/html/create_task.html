@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Task</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-10">
+    <nav class="bg-blue-500 p-4 mb-6 text-white">
+        <a href="create_task.html" class="mr-4 hover:underline">Create Task</a>
+        <a href="view_tasks.html" class="mr-4 hover:underline">View Tasks</a>
+        <a href="settings.html" class="mr-4 hover:underline">Settings</a>
+        <a href="../html/logout.html" class="hover:underline">Logout</a>
+    </nav>
+    <div class="max-w-md mx-auto bg-white p-8 rounded shadow-lg">
+        <h2 class="text-3xl font-extrabold mb-5 text-center text-blue-700">Create a New Task</h2>
+        <form action="../php/create_task.php" method="post" onsubmit="event.preventDefault(); submitForm();">
+            <label for="title" class="block mb-2">Title:</label>
+            <input type="text" name="title" id="title" class="w-full p-2 border rounded mb-4" required>
+            <label for="description" class="block mb-2">Description:</label>
+            <textarea name="description" id="description" class="w-full p-2 border rounded mb-4" required></textarea>
+            <label for="due_date" class="block mb-2">Due Date:</label>
+            <input type="date" name="due_date" id="due_date" class="w-full p-2 border rounded mb-4" required>
+            <label for="priority" class="block mb-2">Priority:</label>
+            <select name="priority" id="priority" class="w-full p-2 border rounded mb-4">
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+            </select>
+            <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Create Task</button>
+        </form>
+    </div>
+    <script>
+        function applyPreferences() {
+            const theme = localStorage.getItem("userTheme");
+            const fontSize = localStorage.getItem("userFontSize");
+            if (theme) {
+                document.body.className = theme;
+            }
+            if (fontSize) {
+                document.body.style.fontSize = fontSize + "px";
+            }
+        }
+        document.addEventListener("DOMContentLoaded", applyPreferences);
+
+        function submitForm() {
+            const form = document.querySelector('form');
+            fetch(form.action, {
+                method: form.method,
+                body: new FormData(form)
+            }).then(response => {
+                if (response.ok) {
+                    window.location.href = 'view_tasks.html';
+                } else {
+                    alert('Task creation failed. Please try again.');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

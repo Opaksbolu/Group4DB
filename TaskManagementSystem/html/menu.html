@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <!-- Navigation Menu -->
+    <nav class="bg-blue-500 p-4 mb-6 text-white">
+        <a href="create_task.html" class="mr-4 hover:underline">Create Task</a>
+        <a href="view_tasks.html" class="mr-4 hover:underline">View Tasks</a>
+        <a href="settings.html" class="mr-4 hover:underline">Settings</a>
+        <a href="../html/logout.html" class="hover:underline">Logout</a>
+    </nav>
+    <div class="max-w-md mx-auto bg-white p-8 rounded shadow">
+        <h2 class="text-2xl font-bold mb-5">Welcome to Your Dashboard</h2>
+        <div class="space-y-4">
+            <a href="settings.html" class="block bg-blue-500 text-white p-2 rounded text-center hover:bg-blue-600">Settings Page</a>
+            <a href="view_tasks.html" class="block bg-green-500 text-white p-2 rounded text-center hover:bg-green-600">View Tasks</a>
+            <a href="create_task.html" class="block bg-purple-500 text-white p-2 rounded text-center hover:bg-purple-600">Create Task</a>
+        </div>
+    </div>
+
+    <script>
+        function applyPreferences() {
+            const theme = localStorage.getItem("userTheme");
+            const fontSize = localStorage.getItem("userFontSize");
+
+            if (theme) {
+                document.body.className = theme;
+            }
+
+            if (fontSize) {
+                document.body.style.fontSize = fontSize + "px";
+            }
+        }
+        document.addEventListener("DOMContentLoaded", applyPreferences);
+    </script>
+</body>
+</html>

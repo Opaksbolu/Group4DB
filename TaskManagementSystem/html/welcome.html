@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-10">
+    <div class="max-w-md mx-auto bg-white p-8 rounded shadow">
+        <h2 class="text-2xl font-bold mb-5">Welcome to Task Management System</h2>
+        <p class="mb-5">Please choose an option below:</p>
+        <div class="space-y-4">
+            <a href="login.html" class="block bg-green-500 text-white p-2 rounded text-center hover:bg-green-600">Login</a>
+            <a href="register.html" class="block bg-blue-500 text-white p-2 rounded text-center hover:bg-blue-600">Register</a>
+        </div>
+    </div>
+</body>
+<script>
+    // Function to apply user preferences on page load
+    function applyPreferences() {
+        const theme = localStorage.getItem("userTheme");
+        const fontSize = localStorage.getItem("userFontSize");
+
+        if (theme) {
+            document.body.className = theme; // Apply theme as body class
+        }
+
+        if (fontSize) {
+            document.body.style.fontSize = fontSize + "px"; // Apply font size
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", applyPreferences);
+</script>
+
+</html>

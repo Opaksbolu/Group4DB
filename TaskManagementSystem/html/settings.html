@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Settings</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .dark-theme {
+            background-color: #1a1a1a;
+            color: #f5f5f5;
+        }
+        .dark-theme .bg-white {
+            background-color: #333333 !important;
+        }
+        .dark-theme .bg-gray-100 {
+            background-color: #2b2b2b !important;
+        }
+        .dark-theme .border {
+            border-color: #444444 !important;
+        }
+        .dark-theme .text-black {
+            color: #f5f5f5 !important;
+        }
+        .dark-theme input, .dark-theme select, .dark-theme button {
+            background-color: #444444 !important;
+            color: #f5f5f5 !important;
+            border-color: #666666 !important;
+        }
+        .dark-theme a {
+            color: #9ad3ff !important;
+        }
+        .light-theme {
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+        }
+        .light-theme .bg-dark {
+            background-color: #ffffff !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-10">
+    <nav class="bg-blue-500 p-4 mb-6 text-white">
+        <a href="create_task.html" class="mr-4 hover:underline">Create Task</a>
+        <a href="view_tasks.html" class="mr-4 hover:underline">View Tasks</a>
+        <a href="settings.html" class="mr-4 hover:underline">Settings</a>
+        <a href="../html/logout.html" class="hover:underline">Logout</a>
+    </nav>
+    <div class="max-w-md mx-auto bg-white p-8 rounded shadow-lg">
+        <h2 class="text-2xl font-bold mb-5" id="userSettingsTitle">User Settings</h2>
+        <form id="themeForm" class="mb-5">
+            <label id="themePreferenceLabel" for="theme" class="block font-medium mb-2">Theme Preference:</label>
+            <select id="theme" name="theme" class="w-full p-2 border rounded mb-4">
+                <option value="Light">Light</option>
+                <option value="Dark">Dark</option>
+            </select>
+            <button type="button" onclick="saveTheme()" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Save Preferences</button>
+        </form>
+        
+        <label id="languageLabel" for="language" class="block font-medium mb-2">Language:</label>
+        <select id="language" name="language" class="w-full p-2 border rounded mb-4">
+            <option value="English">English</option>
+            <option value="Spanish">Spanish</option>
+            <option value="French">French</option>
+        </select>
+        <button type="button" onclick="saveLanguage()" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Save Language</button>
+
+        <h2 class="text-2xl font-bold mb-5 mt-5" id="changePasswordTitle">Change Password</h2>
+        <form id="passwordForm" action="../php/update_password.php" method="post">
+            <label id="currentPasswordLabel" for="current_password" class="block font-medium mb-2">Current Password:</label>
+            <input type="password" id="current_password" name="current_password" class="w-full p-2 border rounded mb-4" required>
+            <label id="newPasswordLabel" for="new_password" class="block font-medium mb-2">New Password:</label>
+            <input type="password" id="new_password" name="new_password" class="w-full p-2 border rounded mb-4" required>
+            <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Update Password</button>
+        </form>
+        
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            applyPreferences();
+            applyLanguage();
+        });
+
+        function saveTheme() {
+            const theme = document.getElementById("theme").value;
+            localStorage.setItem("userTheme", theme);
+            applyPreferences();
+            alert("Theme preferences saved!");
+        }
+
+        function applyPreferences() {
+            const theme = localStorage.getItem("userTheme");
+            if (theme) {
+                if (theme === 'Dark') {
+                    document.body.className = 'dark-theme';
+                } else {
+                    document.body.className = 'light-theme';
+                }
+            }
+        }
+
+        function saveLanguage() {
+            const language = document.getElementById("language").value;
+            localStorage.setItem("userLanguage", language);
+            applyLanguage();
+            alert("Language preferences saved!");
+        }
+
+        function applyLanguage() {
+            const language = localStorage.getItem("userLanguage");
+            if (language) {
+                document.getElementById("language").value = language;
+                const translations = {
+                    English: {
+                        userSettingsTitle: "User Settings",
+                        themePreferenceLabel: "Theme Preference:",
+                        languageLabel: "Language:",
+                        changePasswordTitle: "Change Password",
+                        currentPasswordLabel: "Current Password:",
+                        newPasswordLabel: "New Password:"
+                    },
+                    Spanish: {
+                        userSettingsTitle: "Configuración de Usuario",
+                        themePreferenceLabel: "Preferencia de Tema:",
+                        languageLabel: "Idioma:",
+                        changePasswordTitle: "Cambiar Contraseña",
+                        currentPasswordLabel: "Contraseña Actual:",
+                        newPasswordLabel: "Nueva Contraseña:"
+                    },
+                    French: {
+                        userSettingsTitle: "Paramètres Utilisateur",
+                        themePreferenceLabel: "Préférence de Thème:",
+                        languageLabel: "Langue:",
+                        changePasswordTitle: "Changer le Mot de Passe",
+                        currentPasswordLabel: "Mot de Passe Actuel:",
+                        newPasswordLabel: "Nouveau Mot de Passe:"
+                    }
+                };
+                
+                const textElements = translations[language];
+                if (textElements) {
+                    document.getElementById("userSettingsTitle").textContent = textElements.userSettingsTitle;
+                    document.getElementById("themePreferenceLabel").textContent = textElements.themePreferenceLabel;
+                    document.getElementById("languageLabel").textContent = textElements.languageLabel;
+                    document.getElementById("changePasswordTitle").textContent = textElements.changePasswordTitle;
+                    document.getElementById("currentPasswordLabel").textContent = textElements.currentPasswordLabel;
+                    document.getElementById("newPasswordLabel").textContent = textElements.newPasswordLabel;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
