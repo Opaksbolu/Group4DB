@@ -8,47 +8,181 @@
         body {
             transition: background-color 0.3s ease, color 0.3s ease;
         }
+        .dark-theme {
+            background-color: #1a1a1a;
+            color: #f5f5f5;
+        }
+        .dark-theme .bg-white {
+            background-color: #333333 !important;
+        }
+        .dark-theme .bg-gray-100 {
+            background-color: #2b2b2b !important;
+        }
+        .dark-theme .border {
+            border-color: #444444 !important;
+        }
+        .dark-theme .text-black {
+            color: #f5f5f5 !important;
+        }
+        .dark-theme input, .dark-theme select, .dark-theme button {
+            background-color: #444444 !important;
+            color: #f5f5f5 !important;
+            border-color: #666666 !important;
+        }
+        .dark-theme a {
+            color: #9ad3ff !important;
+        }
+        .light-theme {
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+        }
+        .light-theme .bg-dark {
+            background-color: #ffffff !important;
+        }
     </style>
 </head>
 <body class="bg-gray-100 p-10">
     <nav class="bg-blue-500 p-4 mb-6 text-white">
-        <a href="create_task.html" class="mr-4 hover:underline">Create Task</a>
-        <a href="view_tasks.html" class="mr-4 hover:underline">View Tasks</a>
-        <a href="settings.html" class="mr-4 hover:underline">Settings</a>
-        <a href="../html/logout.html" class="hover:underline">Logout</a>
+        <a href="create_task.html" class="mr-4 hover:underline" id="createTaskLink">Create Task</a>
+        <a href="view_tasks.html" class="mr-4 hover:underline" id="viewTasksLink">View Tasks</a>
+        <a href="settings.html" class="mr-4 hover:underline" id="settingsLink">Settings</a>
+        <a href="../html/logout.html" class="hover:underline" id="logoutLink">Logout</a>
     </nav>
     <div class="max-w-4xl mx-auto bg-white p-8 rounded shadow-lg">
-        <h2 class="text-3xl font-bold mb-5 text-blue-700">Your Tasks</h2>
+        <h2 class="text-3xl font-bold mb-5 text-blue-300" data-translate="yourTasksTitle">Your Tasks</h2>
 
         <!-- Search and Filter Form -->
         <form method="GET" action="../PHP/view_tasks.php" class="space-y-4">
-            <input type="text" name="search" placeholder="Search tasks" class="p-2 border rounded w-full" />
-            <select name="filter_priority" class="p-2 border rounded w-full">
-                <option value="">All Priorities</option>
-                <option value="Low">Low</option>
-                <option value="Medium">Medium</option>
-                <option value="High">High</option>
+            <input type="text" name="search" placeholder="Search tasks" class="p-2 border rounded w-full" data-translate-placeholder="searchPlaceholder" />
+            <select name="filter_priority" class="p-2 border rounded w-full" data-translate="filterPriority">
+                <option value="" data-translate="allPriorities">All Priorities</option>
+                <option value="Low" data-translate="priorityLow">Low</option>
+                <option value="Medium" data-translate="priorityMedium">Medium</option>
+                <option value="High" data-translate="priorityHigh">High</option>
             </select>
-            <select name="filter_status" class="p-2 border rounded w-full">
-                <option value="">All Statuses</option>
-                <option value="Pending">Pending</option>
-                <option value="Completed">Completed</option>
+            <select name="filter_status" class="p-2 border rounded w-full" data-translate="filterStatus">
+                <option value="" data-translate="allStatuses">All Statuses</option>
+                <option value="Pending" data-translate="statusPending">Pending</option>
+                <option value="Completed" data-translate="statusCompleted">Completed</option>
             </select>
-            <select name="sort_by" class="p-2 border rounded w-full">
-                <option value="due_date">Sort by Due Date</option>
-                <option value="priority">Sort by Priority</option>
-                <option value="title">Sort by Title</option>
+            <select name="sort_by" class="p-2 border rounded w-full" data-translate="sortBy">
+                <option value="due_date" data-translate="sortByDueDate">Sort by Due Date</option>
+                <option value="priority" data-translate="sortByPriority">Sort by Priority</option>
+                <option value="title" data-translate="sortByTitle">Sort by Title</option>
             </select>
-            <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Apply</button>
+            <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600" data-translate="applyButton">Apply</button>
         </form>
 
         <!-- Pagination Links -->
         <div class="pagination flex justify-between mt-4">
-            <a href="../PHP/view_tasks.php?page=prev" class="text-blue-500 hover:underline">Previous</a>
-            <a href="../PHP/view_tasks.php?page=next" class="text-blue-500 hover:underline">Next</a>
+            <a href="../PHP/view_tasks.php?page=prev" class="text-blue-500 hover:underline" data-translate="previousPage">Previous</a>
+            <a href="../PHP/view_tasks.php?page=next" class="text-blue-500 hover:underline" data-translate="nextPage">Next</a>
         </div>
 
         <?php include '../PHP/view_tasks.php'; ?>
     </div>
+
+    <!-- Include preferences.js -->
+    <script src="../JS/apply_preferences.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            applyLanguage();
+            applyLanguageNav();
+        });
+        if(localStorage.getItem('userTheme') == 'Dark') {
+                document.body.className = 'dark-theme';
+        }
+        function applyLanguage() {
+            const language = localStorage.getItem("userLanguage") || "English";
+            const translations = {
+                English: {
+                    yourTasksTitle: "Your Tasks",
+                    searchPlaceholder: "Search tasks",
+                    allPriorities: "All Priorities",
+                    priorityLow: "Low",
+                    priorityMedium: "Medium",
+                    priorityHigh: "High",
+                    allStatuses: "All Statuses",
+                    statusPending: "Pending",
+                    statusCompleted: "Completed",
+                    sortBy: "Sort by",
+                    sortByDueDate: "Sort by Due Date",
+                    sortByPriority: "Sort by Priority",
+                    sortByTitle: "Sort by Title",
+                    applyButton: "Apply",
+                    previousPage: "Previous",
+                    nextPage: "Next"
+                },
+                Spanish: {
+                    yourTasksTitle: "Tus Tareas",
+                    searchPlaceholder: "Buscar tareas",
+                    allPriorities: "Todas las Prioridades",
+                    priorityLow: "Baja",
+                    priorityMedium: "Media",
+                    priorityHigh: "Alta",
+                    allStatuses: "Todos los Estados",
+                    statusPending: "Pendiente",
+                    statusCompleted: "Completado",
+                    sortBy: "Ordenar por",
+                    sortByDueDate: "Fecha de Vencimiento",
+                    sortByPriority: "Prioridad",
+                    sortByTitle: "Título",
+                    applyButton: "Aplicar",
+                    previousPage: "Anterior",
+                    nextPage: "Siguiente"
+                },
+                French: {
+                    yourTasksTitle: "Vos Tâches",
+                    searchPlaceholder: "Rechercher des tâches",
+                    allPriorities: "Toutes les Priorités",
+                    priorityLow: "Faible",
+                    priorityMedium: "Moyenne",
+                    priorityHigh: "Élevée",
+                    allStatuses: "Tous les Statuts",
+                    statusPending: "En attente",
+                    statusCompleted: "Terminé",
+                    sortBy: "Trier par",
+                    sortByDueDate: "Date d'échéance",
+                    sortByPriority: "Priorité",
+                    sortByTitle: "Titre",
+                    applyButton: "Appliquer",
+                    previousPage: "Précédent",
+                    nextPage: "Suivant"
+                }
+            };
+
+            const textElements = translations[language];
+
+            if (textElements) {
+                // Update static elements
+                document.querySelector("[data-translate='yourTasksTitle']").textContent = textElements.yourTasksTitle;
+                document.querySelector("[data-translate-placeholder='searchPlaceholder']").placeholder = textElements.searchPlaceholder;
+
+                // Update dropdown options
+                const filterPriorityOptions = document.querySelector("[name='filter_priority']").options;
+                filterPriorityOptions[0].textContent = textElements.allPriorities;
+                filterPriorityOptions[1].textContent = textElements.priorityLow;
+                filterPriorityOptions[2].textContent = textElements.priorityMedium;
+                filterPriorityOptions[3].textContent = textElements.priorityHigh;
+
+                const filterStatusOptions = document.querySelector("[name='filter_status']").options;
+                filterStatusOptions[0].textContent = textElements.allStatuses;
+                filterStatusOptions[1].textContent = textElements.statusPending;
+                filterStatusOptions[2].textContent = textElements.statusCompleted;
+
+                const sortByOptions = document.querySelector("[name='sort_by']").options;
+                sortByOptions[0].textContent = textElements.sortByDueDate;
+                sortByOptions[1].textContent = textElements.sortByPriority;
+                sortByOptions[2].textContent = textElements.sortByTitle;
+
+                // Update buttons and pagination links
+                document.querySelector("[data-translate='applyButton']").textContent = textElements.applyButton;
+                document.querySelector("[data-translate='previousPage']").textContent = textElements.previousPage;
+                document.querySelector("[data-translate='nextPage']").textContent = textElements.nextPage;
+            }
+        }
+
+
+    </script>
 </body>
 </html>

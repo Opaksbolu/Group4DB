@@ -70,5 +70,11 @@ $language = $_SESSION['language'] ?? 'English';
     </script>
 </head>
 <body class="<?= $theme === 'Dark' ? 'dark-theme' : '' ?>">
-  </body>
+<nav>
+    <a href="../HTML/create_task.html">Create Task</a>
+    <a href="../HTML/view_tasks.html">View Tasks</a>
+    <a href="../HTML/settings.html">Settings</a>
+    <a href="../HTML/logout.html">Logout</a>
+</nav>
+</body>
 

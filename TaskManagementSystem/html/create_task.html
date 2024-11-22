@@ -4,44 +4,78 @@
     <meta charset="UTF-8">
     <title>Create Task</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .dark-theme {
+            background-color: #1a1a1a;
+            color: #f5f5f5;
+        }
+        .dark-theme .bg-white {
+            background-color: #333333 !important;
+        }
+        .dark-theme .bg-gray-100 {
+            background-color: #2b2b2b !important;
+        }
+        .dark-theme .border {
+            border-color: #444444 !important;
+        }
+        .dark-theme .text-black {
+            color: #f5f5f5 !important;
+        }
+        .dark-theme input, .dark-theme select, .dark-theme button {
+            background-color: #444444 !important;
+            color: #f5f5f5 !important;
+            border-color: #666666 !important;
+        }
+        .dark-theme a {
+            color: #9ad3ff !important;
+        }
+        .light-theme {
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+        }
+        .light-theme .bg-dark {
+            background-color: #ffffff !important;
+        }
+    </style>
 </head>
 <body class="bg-gray-100 p-10">
     <nav class="bg-blue-500 p-4 mb-6 text-white">
-        <a href="create_task.html" class="mr-4 hover:underline">Create Task</a>
-        <a href="view_tasks.html" class="mr-4 hover:underline">View Tasks</a>
-        <a href="settings.html" class="mr-4 hover:underline">Settings</a>
-        <a href="../html/logout.html" class="hover:underline">Logout</a>
+        <a href="create_task.html" class="mr-4 hover:underline" id="createTaskLink">Create Task</a>
+        <a href="view_tasks.html" class="mr-4 hover:underline" id="viewTasksLink">View Tasks</a>
+        <a href="settings.html" class="mr-4 hover:underline" id="settingsLink">Settings</a>
+        <a href="../html/logout.html" class="hover:underline" id="logoutLink">Logout</a>
     </nav>
     <div class="max-w-md mx-auto bg-white p-8 rounded shadow-lg">
-        <h2 class="text-3xl font-extrabold mb-5 text-center text-blue-700">Create a New Task</h2>
+        <h2 class="text-3xl font-extrabold mb-5 text-center text-blue-300" data-translate='createTaskTitle'>Create a New Task</h2>
         <form action="../php/create_task.php" method="post" onsubmit="event.preventDefault(); submitForm();">
-            <label for="title" class="block mb-2">Title:</label>
-            <input type="text" name="title" id="title" class="w-full p-2 border rounded mb-4" required>
-            <label for="description" class="block mb-2">Description:</label>
-            <textarea name="description" id="description" class="w-full p-2 border rounded mb-4" required></textarea>
-            <label for="due_date" class="block mb-2">Due Date:</label>
+            <label for="title" class="block mb-2"data-translate='taskTitleLabel'>Title:</label>
+            <input type="text" name="title" id="title" data-translate-placeholder='taskTitlePlaceholder' class="w-full p-2 border rounded mb-4" required>
+            <label for="description" class="block mb-2" data-translate='taskDescriptionLabel'>Description:</label>
+            <textarea name="description" id="description" data-translate-placeholder='taskDescriptionPlaceholder' class="w-full p-2 border rounded mb-4" required></textarea>
+            <label for="due_date" class="block mb-2" data-translate='dueDateLabel'>Due Date:</label>
             <input type="date" name="due_date" id="due_date" class="w-full p-2 border rounded mb-4" required>
-            <label for="priority" class="block mb-2">Priority:</label>
+            <label for="priority" class="block mb-2" data-translate='priorityLabel'>Priority:</label>
             <select name="priority" id="priority" class="w-full p-2 border rounded mb-4">
                 <option value="Low">Low</option>
                 <option value="Medium">Medium</option>
                 <option value="High">High</option>
             </select>
-            <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Create Task</button>
+            <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600" data-translate='createTaskButton'>Create Task</button>
         </form>
     </div>
+    <script src="../JS/apply_preferences.js"></script>
     <script>
-        function applyPreferences() {
-            const theme = localStorage.getItem("userTheme");
-            const fontSize = localStorage.getItem("userFontSize");
-            if (theme) {
-                document.body.className = theme;
-            }
-            if (fontSize) {
-                document.body.style.fontSize = fontSize + "px";
-            }
+
+        if(localStorage.getItem('userTheme') == 'Dark') {
+                document.body.className = 'dark-theme';
         }
-        document.addEventListener("DOMContentLoaded", applyPreferences);
+        document.addEventListener("DOMContentLoaded", applyLanguage);
+        document.addEventListener("DOMContentLoaded", applyLanguageNav);
+
+
 
         function submitForm() {
             const form = document.querySelector('form');
@@ -56,6 +90,69 @@
                 }
             });
         }
+        function applyLanguage() {
+            const language = localStorage.getItem("userLanguage");
+            const translations = {
+                English: {
+                    createTaskTitle: "Create a New Task",
+                    taskTitleLabel: "Title:",
+                    taskTitlePlaceholder: "Enter task title",
+                    taskDescriptionLabel: "Description:",
+                    taskDescriptionPlaceholder: "Enter task description",
+                    dueDateLabel: "Due Date:",
+                    priorityLabel: "Priority:",
+                    priorityLow: "Low",
+                    priorityMedium: "Medium",
+                    priorityHigh: "High",
+                    createTaskButton: "Create Task"
+                },
+                Spanish: {
+                    createTaskTitle: "Crear una Nueva Tarea",
+                    taskTitleLabel: "Título:",
+                    taskTitlePlaceholder: "Ingrese el título de la tarea",
+                    taskDescriptionLabel: "Descripción:",
+                    taskDescriptionPlaceholder: "Ingrese la descripción de la tarea",
+                    dueDateLabel: "Fecha de Vencimiento:",
+                    priorityLabel: "Prioridad:",
+                    priorityLow: "Baja",
+                    priorityMedium: "Media",
+                    priorityHigh: "Alta",
+                    createTaskButton: "Crear Tarea"
+                },
+                French: {
+                    createTaskTitle: "Créer une Nouvelle Tâche",
+                    taskTitleLabel: "Titre:",
+                    taskTitlePlaceholder: "Entrez le titre de la tâche",
+                    taskDescriptionLabel: "Description:",
+                    taskDescriptionPlaceholder: "Entrez la description de la tâche",
+                    dueDateLabel: "Date d'Échéance:",
+                    priorityLabel: "Priorité:",
+                    priorityLow: "Faible",
+                    priorityMedium: "Moyenne",
+                    priorityHigh: "Élevée",
+                    createTaskButton: "Créer la Tâche"
+                }
+            };
+
+            const textElements = translations[language];
+            if (textElements) {
+                document.querySelector("[data-translate='createTaskTitle']").textContent = textElements.createTaskTitle;
+                document.querySelector("[data-translate='taskTitleLabel']").textContent = textElements.taskTitleLabel;
+                document.querySelector("[data-translate-placeholder='taskTitlePlaceholder']").placeholder = textElements.taskTitlePlaceholder;
+                document.querySelector("[data-translate='taskDescriptionLabel']").textContent = textElements.taskDescriptionLabel;
+                document.querySelector("[data-translate-placeholder='taskDescriptionPlaceholder']").placeholder = textElements.taskDescriptionPlaceholder;
+                document.querySelector("[data-translate='dueDateLabel']").textContent = textElements.dueDateLabel;
+                document.querySelector("[data-translate='priorityLabel']").textContent = textElements.priorityLabel;
+
+                const priorityOptions = document.querySelectorAll("#priority option");
+                priorityOptions[0].textContent = textElements.priorityLow;
+                priorityOptions[1].textContent = textElements.priorityMedium;
+                priorityOptions[2].textContent = textElements.priorityHigh;
+
+                document.querySelector("[data-translate='createTaskButton']").textContent = textElements.createTaskButton;
+            }
+        }
+
     </script>
 </body>
 </html>

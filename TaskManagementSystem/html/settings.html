@@ -43,10 +43,10 @@
 </head>
 <body class="bg-gray-100 p-10">
     <nav class="bg-blue-500 p-4 mb-6 text-white">
-        <a href="create_task.html" class="mr-4 hover:underline">Create Task</a>
-        <a href="view_tasks.html" class="mr-4 hover:underline">View Tasks</a>
-        <a href="settings.html" class="mr-4 hover:underline">Settings</a>
-        <a href="../html/logout.html" class="hover:underline">Logout</a>
+        <a href="create_task.html" class="mr-4 hover:underline" id="createTaskLink">Create Task</a>
+        <a href="view_tasks.html" class="mr-4 hover:underline" id="viewTasksLink">View Tasks</a>
+        <a href="settings.html" class="mr-4 hover:underline" id="settingsLink">Settings</a>
+        <a href="../html/logout.html" class="hover:underline" id="logoutLink">Logout</a>
     </nav>
     <div class="max-w-md mx-auto bg-white p-8 rounded shadow-lg">
         <h2 class="text-2xl font-bold mb-5" id="userSettingsTitle">User Settings</h2>
@@ -56,7 +56,7 @@
                 <option value="Light">Light</option>
                 <option value="Dark">Dark</option>
             </select>
-            <button type="button" onclick="saveTheme()" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Save Preferences</button>
+            <button type="button" onclick="saveTheme()" id="savePrefButton"class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Save Preferences</button>
         </form>
         
         <label id="languageLabel" for="language" class="block font-medium mb-2">Language:</label>
@@ -65,7 +65,7 @@
             <option value="Spanish">Spanish</option>
             <option value="French">French</option>
         </select>
-        <button type="button" onclick="saveLanguage()" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Save Language</button>
+        <button type="button" onclick="saveLanguage()" id="languageButton" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Save Language</button>
 
         <h2 class="text-2xl font-bold mb-5 mt-5" id="changePasswordTitle">Change Password</h2>
         <form id="passwordForm" action="../php/update_password.php" method="post">
@@ -73,15 +73,16 @@
             <input type="password" id="current_password" name="current_password" class="w-full p-2 border rounded mb-4" required>
             <label id="newPasswordLabel" for="new_password" class="block font-medium mb-2">New Password:</label>
             <input type="password" id="new_password" name="new_password" class="w-full p-2 border rounded mb-4" required>
-            <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Update Password</button>
+            <button type="submit" id="updatePasswordButton" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Update Password</button>
         </form>
         
     </div>
-
+    <script src="../JS/apply_preferences.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             applyPreferences();
             applyLanguage();
+            applyLanguageNav();
         });
 
         function saveTheme() {
@@ -93,64 +94,123 @@
 
         function applyPreferences() {
             const theme = localStorage.getItem("userTheme");
+            const themeDropdown = document.getElementById("theme");
+
             if (theme) {
                 if (theme === 'Dark') {
                     document.body.className = 'dark-theme';
                 } else {
                     document.body.className = 'light-theme';
                 }
+
+                // Ensure the dropdown reflects the saved theme
+                if (themeDropdown) {
+                    themeDropdown.value = theme;
+                }
+            } else {
+                // Default to Light theme if nothing is saved
+                document.body.className = 'light-theme';
+                if (themeDropdown) {
+                    themeDropdown.value = 'Light';
+                }
             }
         }
+
 
         function saveLanguage() {
             const language = document.getElementById("language").value;
             localStorage.setItem("userLanguage", language);
             applyLanguage();
+            applyLanguageNav();
             alert("Language preferences saved!");
         }
 
         function applyLanguage() {
             const language = localStorage.getItem("userLanguage");
-            if (language) {
-                document.getElementById("language").value = language;
-                const translations = {
-                    English: {
-                        userSettingsTitle: "User Settings",
-                        themePreferenceLabel: "Theme Preference:",
-                        languageLabel: "Language:",
-                        changePasswordTitle: "Change Password",
-                        currentPasswordLabel: "Current Password:",
-                        newPasswordLabel: "New Password:"
-                    },
-                    Spanish: {
-                        userSettingsTitle: "Configuración de Usuario",
-                        themePreferenceLabel: "Preferencia de Tema:",
-                        languageLabel: "Idioma:",
-                        changePasswordTitle: "Cambiar Contraseña",
-                        currentPasswordLabel: "Contraseña Actual:",
-                        newPasswordLabel: "Nueva Contraseña:"
-                    },
-                    French: {
-                        userSettingsTitle: "Paramètres Utilisateur",
-                        themePreferenceLabel: "Préférence de Thème:",
-                        languageLabel: "Langue:",
-                        changePasswordTitle: "Changer le Mot de Passe",
-                        currentPasswordLabel: "Mot de Passe Actuel:",
-                        newPasswordLabel: "Nouveau Mot de Passe:"
-                    }
-                };
-                
-                const textElements = translations[language];
-                if (textElements) {
-                    document.getElementById("userSettingsTitle").textContent = textElements.userSettingsTitle;
-                    document.getElementById("themePreferenceLabel").textContent = textElements.themePreferenceLabel;
-                    document.getElementById("languageLabel").textContent = textElements.languageLabel;
-                    document.getElementById("changePasswordTitle").textContent = textElements.changePasswordTitle;
-                    document.getElementById("currentPasswordLabel").textContent = textElements.currentPasswordLabel;
-                    document.getElementById("newPasswordLabel").textContent = textElements.newPasswordLabel;
+            const languageDropdown = document.getElementById("language");
+
+            const translations = {
+                English: {
+                    userSettingsTitle: "User Settings",
+                    themePreferenceLabel: "Theme Preference:",
+                    languageLabel: "Language:",
+                    changePasswordTitle: "Change Password",
+                    currentPasswordLabel: "Current Password:",
+                    newPasswordLabel: "New Password:",
+                    updatePasswordButton: "Update Password",
+                    languageButton: "Save Language",
+                    savePrefButton: "Save Preferences",
+                    themeLight: "Light",
+                    themeDark: "Dark",
+                    langEnglish: "English",
+                    langSpanish: "Spanish",
+                    langFrench: "French"
+                },
+                Spanish: {
+                    userSettingsTitle: "Configuración de Usuario",
+                    themePreferenceLabel: "Preferencia de Tema:",
+                    languageLabel: "Idioma:",
+                    changePasswordTitle: "Cambiar Contraseña",
+                    currentPasswordLabel: "Contraseña Actual:",
+                    newPasswordLabel: "Nueva Contraseña:",
+                    updatePasswordButton: "Cambiar Contraseña",
+                    languageButton: "Guardar Idioma",
+                    savePrefButton: "Guardar Preferencias",
+                    themeLight: "Claro",
+                    themeDark: "Oscuro",
+                    langEnglish: "Inglés",
+                    langSpanish: "Español",
+                    langFrench: "Francés"
+                },
+                French: {
+                    userSettingsTitle: "Paramètres Utilisateur",
+                    themePreferenceLabel: "Préférence de Thème:",
+                    languageLabel: "Langue:",
+                    changePasswordTitle: "Changer le Mot de Passe",
+                    currentPasswordLabel: "Mot de Passe Actuel:",
+                    newPasswordLabel: "Nouveau Mot de Passe:",
+                    updatePasswordButton: "Changer le Mot de Passe",
+                    languageButton: "Enregistrer la Langue",
+                    savePrefButton: "Enregistrer les Préférences",
+                    themeLight: "Clair",
+                    themeDark: "Sombre",
+                    langEnglish: "Anglais",
+                    langSpanish: "Espagnol",
+                    langFrench: "Français"
+                }
+            };
+
+            const textElements = translations[language];
+            
+            if (textElements) {
+                // Update static text
+                document.getElementById("userSettingsTitle").textContent = textElements.userSettingsTitle;
+                document.getElementById("themePreferenceLabel").textContent = textElements.themePreferenceLabel;
+                document.getElementById("languageLabel").textContent = textElements.languageLabel;
+                document.getElementById("changePasswordTitle").textContent = textElements.changePasswordTitle;
+                document.getElementById("currentPasswordLabel").textContent = textElements.currentPasswordLabel;
+                document.getElementById("newPasswordLabel").textContent = textElements.newPasswordLabel;
+                document.getElementById("updatePasswordButton").textContent = textElements.updatePasswordButton;
+                document.getElementById("languageButton").textContent = textElements.languageButton;
+                document.getElementById("savePrefButton").textContent = textElements.savePrefButton;
+
+                // Update dropdown options for theme
+                const themeOptions = document.getElementById("theme").options;
+                themeOptions[0].textContent = textElements.themeLight;
+                themeOptions[1].textContent = textElements.themeDark;
+
+                // Update dropdown options for language
+                const languageOptions = document.getElementById("language").options;
+                languageOptions[0].textContent = textElements.langEnglish;
+                languageOptions[1].textContent = textElements.langSpanish;
+                languageOptions[2].textContent = textElements.langFrench;
+                if (languageDropdown) {
+                    languageDropdown.value = language;
                 }
             }
+
         }
+
     </script>
 </body>
 </html>
